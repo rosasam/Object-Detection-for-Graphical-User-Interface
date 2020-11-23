@@ -47,6 +47,7 @@ if __name__ == "__main__":
     logger = Logger(log_dir)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f'using {device}')
 
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
@@ -112,6 +113,7 @@ if __name__ == "__main__":
 
             imgs = Variable(imgs.to(device))
             print(imgs.size())
+            breakpoint()
             targets = Variable(targets.to(device), requires_grad=False)
 
             loss, outputs = model(imgs, targets)
