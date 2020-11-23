@@ -8,7 +8,7 @@ from xml.dom import minidom
 from shutil import copyfile
 import tensorflow as tf
 import hashlib
-import tqdm
+from tqdm import tqdm
 import random
 
 IMG_WIDTH = 540
@@ -229,7 +229,7 @@ def component_group_to_txt(component_group):
         height = y_max - y_min
         x_center = x_min + width / 2
         y_center = y_min + height / 2
-        output_list.append(' '.join([label_index, x_center, y_center, width, height]))
+        output_list.append(' '.join([str(item) for item in [label_index, x_center, y_center, width, height]]))
     
     return (name, '\n'.join(output_list))
     
@@ -266,10 +266,10 @@ training_set_path = './data/custom/'
 hi = load_hierarchies()
 #img = load_screenshots()
 components = [recursive_extract(h, h['id']) for h in hi]
-for c in tqdm(components):
-    copy_component_image(c[0]) 
+# for c in tqdm(components):
+#     copy_component_image(c[0]) 
 txts = [component_group_to_txt(component_group) for component_group in components]
-txt_paths = [annotation_path + txt[0] for txt in txts]
+txt_paths = ['./data/custom/images/' + txt[0].split('.')[0] + '.jpg' for txt in txts]
 train_data, validation_data = split_data(txt_paths)
 
 save_txt('\n'.join(train_data), training_set_path + 'train.txt')
