@@ -123,7 +123,7 @@ def normalize_bounds(bounds):
         # divisor = BOUNDS_MAX_HEIGHT if i % 2 else BOUNDS_MAX_WIDTH
         # multiplier = IMG_HEIGHT if i % 2 else IMG_WIDTH
         # bounds[i] = bounds[i] * multiplier // divisor
-        divisor = IMG_HEIGHT if i % 2 else IMG_WIDTH
+        divisor = BOUNDS_MAX_HEIGHT if i % 2 else BOUNDS_MAX_WIDTH
         bounds[i] = bounds[i] / divisor
     return bounds
 

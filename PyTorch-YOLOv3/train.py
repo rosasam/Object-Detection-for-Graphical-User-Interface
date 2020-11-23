@@ -74,7 +74,7 @@ if __name__ == "__main__":
             model.load_darknet_weights(opt.pretrained_weights)
 
     # Get dataloader
-    dataset = ListDataset(train_path, augment=True, multiscale=opt.multiscale_training) #,  img_size=opt.img_size)
+    dataset = ListDataset(train_path, augment=True, multiscale=opt.multiscale_training, img_size=opt.img_size)
     dataloader = torch.utils.data.DataLoader(
         dataset,
         batch_size=opt.batch_size,
@@ -113,7 +113,6 @@ if __name__ == "__main__":
 
             imgs = Variable(imgs.to(device))
             print(imgs.size())
-            breakpoint()
             targets = Variable(targets.to(device), requires_grad=False)
 
             loss, outputs = model(imgs, targets)

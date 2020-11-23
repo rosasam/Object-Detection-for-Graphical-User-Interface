@@ -257,6 +257,7 @@ class Darknet(nn.Module):
                     layer_i = int(module_def["from"])
                     x = layer_outputs[-1] + layer_outputs[layer_i]
                 elif module_def["type"] == "yolo":
+                    breakpoint()
                     x, layer_loss = module[0](x, targets, img_dim)
                     loss += layer_loss
                     yolo_outputs.append(x)
