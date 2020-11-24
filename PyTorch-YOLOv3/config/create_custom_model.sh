@@ -10,7 +10,7 @@ echo "
 # Training
 batch=16
 subdivisions=1
-width=133
+width=236
 height=236
 channels=3
 momentum=0.9

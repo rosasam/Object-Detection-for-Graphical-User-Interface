@@ -277,6 +277,9 @@ save_txt('\n'.join(validation_data), training_set_path + 'valid.txt')
 for txt in tqdm(txts):
     save_txt(txt[1], annotation_path + txt[0]) 
 
+print(f'Nof classes: {len(CLASSES)}')
+classes_text = '\n'.join(CLASSES)
+save_txt(classes_text, './data/custom/classes.names')
 # writer = tf.io.TFRecordWriter(OUTPUT_PATH)
 # for component_group in tqdm.tqdm(components):
 #     record = component_group_to_tfrecord(component_group) 

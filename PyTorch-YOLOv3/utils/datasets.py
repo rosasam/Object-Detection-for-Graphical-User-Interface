@@ -27,7 +27,6 @@ def pad_to_square(img, pad_value):
 
 def resize(image, size):
     image = F.interpolate(image.unsqueeze(0), size=size, mode="nearest").squeeze(0)
-    # print(image.shape)
     return image
 
 
@@ -39,7 +38,7 @@ def random_resize(images, min_size=288, max_size=448):
 
 class ImageFolder(Dataset):
     def __init__(self, folder_path, img_size=416):
-        self.files = sorted(glob.glob("%s/*.jpg" % folder_path))[:10]
+        self.files = sorted(glob.glob("%s/*.*" % folder_path))
         self.img_size = img_size
 
     def __getitem__(self, index):
@@ -104,12 +103,8 @@ class ListDataset(Dataset):
         label_path = self.label_files[index % len(self.img_files)].rstrip()
 
         targets = None
-        # label_path = label_path.replace("combined", "labels")
-        if not os.path.exists(label_path):
-            print(label_path)
         if os.path.exists(label_path):
             boxes = torch.from_numpy(np.loadtxt(label_path).reshape(-1, 5))
-
             # Extract coordinates for unpadded + unscaled image
             x1 = w_factor * (boxes[:, 1] - boxes[:, 3] / 2)
             y1 = h_factor * (boxes[:, 2] - boxes[:, 4] / 2)

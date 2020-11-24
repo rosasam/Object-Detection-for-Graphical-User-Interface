@@ -7,5 +7,3 @@ tensorboard
 terminaltables
 pillow
 tqdm
-tensorboardX
-pycocotools
