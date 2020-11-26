@@ -1,1 +1,8 @@
 ./data/custom/images/71431.jpg
+./data/custom/images/71558.jpg
+./data/custom/images/70734.jpg
+./data/custom/images/70793.jpg
+./data/custom/images/70899.jpg
+./data/custom/images/70943.jpg
+./data/custom/images/70950.jpg
+./data/custom/images/71193.jpg

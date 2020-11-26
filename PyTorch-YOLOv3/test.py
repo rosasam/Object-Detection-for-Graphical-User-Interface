@@ -44,15 +44,19 @@ def evaluate(model, path, iou_thres, conf_thres, nms_thres, img_size, batch_size
         imgs = Variable(imgs.type(Tensor), requires_grad=False)
 
         with torch.no_grad():
+            print('got here')
             outputs = model(imgs)
+            print('and here')
             outputs = non_max_suppression(outputs, conf_thres=conf_thres, nms_thres=nms_thres)
+            print('outputs')
 
         sample_metrics += get_batch_statistics(outputs, targets, iou_threshold=iou_thres)
+        print('sample metrics')
 
     # Concatenate sample statistics
     true_positives, pred_scores, pred_labels = [np.concatenate(x, 0) for x in list(zip(*sample_metrics))]
     precision, recall, AP, f1, ap_class = ap_per_class(true_positives, pred_scores, pred_labels, labels)
-
+    print('ap_per_class')
     return precision, recall, AP, f1, ap_class
 
 
@@ -95,7 +99,7 @@ if __name__ == "__main__":
         conf_thres=opt.conf_thres,
         nms_thres=opt.nms_thres,
         img_size=opt.img_size,
-        batch_size=8,
+        batch_size=opt.batch_size,
     )
 
     print("Average Precisions:")
