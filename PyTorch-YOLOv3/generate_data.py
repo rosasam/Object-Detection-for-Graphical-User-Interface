@@ -10,9 +10,9 @@ import tensorflow as tf
 import hashlib
 from tqdm import tqdm
 import random
+from PIL import Image
 
-IMG_WIDTH = 540
-IMG_HEIGHT = 960
+IMG_SIZE = 416
 #ANNOTATIONS_SAVE_DIR = 'annotations'
 OUTPUT_PATH = './enrico.tfrecord'
 BASE_PATH = '../../enrico'
@@ -154,8 +154,8 @@ def component_to_VOC(component):
         'path': os.path.join(ANNOTATIONS_SAVE_DIR, filename),
         'source': {'database': 'Enrico'},
         'size': {
-            'width': IMG_WIDTH,
-            'height': IMG_HEIGHT,
+            'width': IMG_SIZE,
+            'height': IMG_SIZE,
             'depth': 3
         },
         'segmented': 0,
@@ -267,8 +267,14 @@ def copy_component_image(component):
     filename = f'{component["image_id"]}.jpg'
     src = os.path.join(BASE_PATH, 'screenshots', filename)
     dst = os.path.join('./data/custom/images', filename)
-    if not os.path.exists(dst):
-        copyfile(src, dst)
+
+    background = Image.new('RGB', (IMG_SIZE, IMG_SIZE))
+    picture = Image.open(imgpath).convert('RGB')
+    picture.thumbnail(IMG_SIZE, Image.ANTIALIAS)
+    background.paste(picture)
+
+    background.save(dst, 'JPEG')
+    
 
 annotation_path = './data/custom/labels/'
 training_set_path = './data/custom/'
@@ -276,8 +282,10 @@ training_set_path = './data/custom/'
 hi = load_hierarchies()
 #img = load_screenshots()
 components = [recursive_extract(h, h['id']) for h in hi]
-# for c in tqdm(components):
-#     copy_component_image(c[0]) 
+
+for c in tqdm(components):
+    copy_component_image(c[0])
+
 txts = [component_group_to_txt(component_group) for component_group in components]
 large_components = sum([t[2] for t in txts])
 txts = [(t[0], t[1]) for t in txts]
