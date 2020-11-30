@@ -121,11 +121,16 @@ def is_component(dictionary):
 def normalize_bounds(bounds):
     bounds = copy(bounds)
     for i in range(4):
+        # Screenshots are transformed to squares, add the extra width and
+        # height to bounds
+        if i % 2 == 0:
+            bounds[i] += (BOUNDS_MAX_HEIGHT - BOUNDS_MAX_WIDTH) // 2
+            
         # uneven index: y, even index: x
         # divisor = BOUNDS_MAX_HEIGHT if i % 2 else BOUNDS_MAX_WIDTH
         # multiplier = IMG_HEIGHT if i % 2 else IMG_WIDTH
         # bounds[i] = bounds[i] * multiplier // divisor
-        divisor = BOUNDS_MAX_HEIGHT if i % 2 else BOUNDS_MAX_WIDTH
+        divisor = BOUNDS_MAX_HEIGHT # assuming height == width
         bounds[i] = bounds[i] / divisor
     return bounds
 
