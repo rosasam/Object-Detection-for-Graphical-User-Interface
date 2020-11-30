@@ -269,9 +269,9 @@ def copy_component_image(component):
     dst = os.path.join('./data/custom/images', filename)
 
     background = Image.new('RGB', (IMG_SIZE, IMG_SIZE))
-    picture = Image.open(imgpath).convert('RGB')
-    picture.thumbnail(IMG_SIZE, Image.ANTIALIAS)
-    background.paste(picture)
+    picture = Image.open(src).convert('RGB')
+    picture.thumbnail((IMG_SIZE, IMG_SIZE), Image.ANTIALIAS)
+    background.paste(picture, ((IMG_SIZE - picture.size[0]) // 2, 0))
 
     background.save(dst, 'JPEG')
     
@@ -283,6 +283,9 @@ hi = load_hierarchies()
 #img = load_screenshots()
 components = [recursive_extract(h, h['id']) for h in hi]
 
+files = glob.glob('./data/custom/images/*jpg')
+for f in files:
+    os.remove(f)
 for c in tqdm(components):
     copy_component_image(c[0])
 
