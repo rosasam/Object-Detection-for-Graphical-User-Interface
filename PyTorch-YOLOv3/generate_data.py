@@ -64,6 +64,8 @@ CLASSES = [
     'Pager Indicator',
 ]
 
+large_components = 0
+
 # I/O
 def load_hierarchies():
     directory = os.path.join(BASE_PATH, 'hierarchies')
@@ -220,7 +222,7 @@ def component_group_to_tfrecord(component_group):
 
 def component_group_to_txt(component_group):
     name = f"{component_group[0]['image_id']}.txt"
-
+    large_components = 0
     output_list = []
     for component in component_group:
         label_index = CLASSES.index(component['class'])
@@ -229,9 +231,12 @@ def component_group_to_txt(component_group):
         height = y_max - y_min
         x_center = x_min + width / 2
         y_center = y_min + height / 2
+        #if width > 0.9 and height > 0.9:
+        if x_min < 0.01 or y_min < 0.005 or x_max > 0.95 or y_max > 0.99 or width > 0.99 or height > 0.99:
+            large_components += 1 
+            continue
         output_list.append(' '.join([str(item) for item in [label_index, x_center, y_center, width, height]]))
-    
-    return (name, '\n'.join(output_list))
+    return (name, '\n'.join(output_list), large_components)
     
 def split_data(data, training_size=0.75):
     data = [d for d in data]
@@ -269,6 +274,8 @@ components = [recursive_extract(h, h['id']) for h in hi]
 # for c in tqdm(components):
 #     copy_component_image(c[0]) 
 txts = [component_group_to_txt(component_group) for component_group in components]
+large_components = sum([t[2] for t in txts])
+txts = [(t[0], t[1]) for t in txts]
 txt_paths = ['./data/custom/images/' + txt[0].split('.')[0] + '.jpg' for txt in txts]
 train_data, validation_data = split_data(txt_paths)
 
@@ -276,10 +283,10 @@ save_txt('\n'.join(train_data), training_set_path + 'train.txt')
 save_txt('\n'.join(validation_data), training_set_path + 'valid.txt')
 for txt in tqdm(txts):
     save_txt(txt[1], annotation_path + txt[0]) 
-
+print(f'large_components: {large_components}')
 print(f'Nof classes: {len(CLASSES)}')
-classes_text = '\n'.join(CLASSES)
-save_txt(classes_text, './data/custom/classes.names')
+#classes_text = '\n'.join(CLASSES)
+#save_txt(classes_text, './data/custom/classes.names')
 # writer = tf.io.TFRecordWriter(OUTPUT_PATH)
 # for component_group in tqdm.tqdm(components):
 #     record = component_group_to_tfrecord(component_group) 
