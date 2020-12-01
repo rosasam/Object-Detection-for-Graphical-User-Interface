@@ -4,6 +4,8 @@ results/
 data/custom/images
 data/samples
 data/custom/labels
+data/custom/train.txt
+data/custom/valid.txt
 weights/
 .DS_Store
 build
