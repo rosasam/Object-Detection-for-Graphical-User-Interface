@@ -1,6 +1,7 @@
 from PIL import Image
 import sys
 import glob
+import os
 
 def copy_image(filename, img_size):
     src = os.path.join('../../enrico', 'screenshots', filename)
@@ -14,10 +15,11 @@ def copy_image(filename, img_size):
     background.save(dst, 'JPEG')
 
 if __name__ == '__main__':
+    print(sys.argv)
     if len(sys.argv) < 3:
-      exit(0)
-    size = sys.argv[1]
-    n_images = sys.argv[2]
+        exit(0)
+    img_size = int(sys.argv[1])
+    n_images = int(sys.argv[2])
     images = glob.glob('../../enrico/screenshots/*.jpg')
-    for image in images[:n]:
-      copy_image(image, img_size)
+    for image in images[:n_images]:
+        copy_image(image.split('/')[-1], img_size)
