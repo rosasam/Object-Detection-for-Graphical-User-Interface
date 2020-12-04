@@ -50,7 +50,7 @@ CLASSES = [
     'Slider',
     'Web View',
     'Text Button',
-    'Text',
+     #'Text',
     'Map View',
     'Drawer',
     'Modal',
@@ -283,11 +283,11 @@ hi = load_hierarchies()
 #img = load_screenshots()
 components = [recursive_extract(h, h['id']) for h in hi]
 
-files = glob.glob('./data/custom/images/*jpg')
-for f in files:
-    os.remove(f)
-for c in tqdm(components):
-    copy_component_image(c[0])
+# files = glob.glob('./data/custom/images/*jpg')
+# for f in files:
+#     os.remove(f)
+# for c in tqdm(components):
+#     copy_component_image(c[0])
 
 txts = [component_group_to_txt(component_group) for component_group in components]
 large_components = sum([t[2] for t in txts])
@@ -301,22 +301,4 @@ for txt in tqdm(txts):
     save_txt(txt[1], annotation_path + txt[0]) 
 print(f'large_components: {large_components}')
 print(f'Nof classes: {len(CLASSES)}')
-#classes_text = '\n'.join(CLASSES)
-#save_txt(classes_text, './data/custom/classes.names')
-# writer = tf.io.TFRecordWriter(OUTPUT_PATH)
-# for component_group in tqdm.tqdm(components):
-#     record = component_group_to_tfrecord(component_group) 
-#     writer.write(record.SerializeToString())
-# writer.close()
-# components = [d for c in components for d in c]
-# print_component_stats(components)
-
-# # Only generate annotations for text buttons for now
-# components = filter_components_by_class(components, 'Text Button')
-# [copy_component_image(component) for component in components]
-# xmls = [component_to_VOC(component) for component in components]
-
-# for i, xml in enumerate(xmls):
-#     save_xml(xml, os.path.join(ANNOTATIONS_SAVE_DIR, f'{i:05d}.xml'))
-
 print('DONE')
