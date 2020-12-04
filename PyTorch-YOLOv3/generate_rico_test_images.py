@@ -17,11 +17,10 @@ def copy_image(filename, img_size):
     background.save(dst, 'JPEG')
 
 if __name__ == '__main__':
-    print(sys.argv)
     if len(sys.argv) < 3:
         exit(0)
     img_size = int(sys.argv[1])
     n_images = int(sys.argv[2])
-    images = glob.glob(f'IMPORT_DIR/*.jpg')
+    images = glob.glob(f'{IMPORT_DIR}/*.jpg')
     for image in images[:n_images]:
         copy_image(image.split('/')[-1], img_size)
