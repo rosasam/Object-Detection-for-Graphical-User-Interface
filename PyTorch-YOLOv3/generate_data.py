@@ -115,7 +115,7 @@ def create_component(dictionary, hierarchy_id):
     }
 
 def is_component(dictionary):
-    return 'componentLabel' in dictionary
+    return 'componentLabel' in dictionary and dictionary['componentLabel'] in CLASSES
 
 # NOTE: Normalizes to [0, 1] range, not training image size range 
 def normalize_bounds(bounds):
@@ -289,7 +289,7 @@ components = [recursive_extract(h, h['id']) for h in hi]
 # for c in tqdm(components):
 #     copy_component_image(c[0])
 
-txts = [component_group_to_txt(component_group) for component_group in components]
+txts = [component_group_to_txt(component_group) for component_group in components if component_group]
 large_components = sum([t[2] for t in txts])
 txts = [(t[0], t[1]) for t in txts]
 txt_paths = ['./data/custom/images/' + txt[0].split('.')[0] + '.jpg' for txt in txts]
