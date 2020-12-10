@@ -105,7 +105,7 @@ if __name__ == "__main__":
             loss, outputs = model(imgs, targets)
             loss.backward()
 
-            if batches_done % opt.gradient_accumulations == 0:
+            if batches_done % opt.gradient_accumulations:
                 # Accumulates gradient before each step
                 optimizer.step()
                 optimizer.zero_grad()

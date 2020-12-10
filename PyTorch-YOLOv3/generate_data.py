@@ -34,6 +34,73 @@ issues = [
     '50109',
     '72201',
     '19141',
+    '1986',
+    '68484',
+    '2081',
+    '38375',
+    '41602',
+    '71046',
+    '37707',
+    '21227',
+    '6105',
+    '37021',
+    '31002',
+    '10498',
+    '56375',
+    '63070',
+    '32802',
+    '526',
+    '49581',
+    '23788',
+    '51032',
+    '14285',
+    '63183',
+    '28511',
+    '71558',
+    '19713',
+    '71999',
+    '16140',
+    '41458',
+    '59514',
+    '1130',
+    '1753',
+    '2559',
+    '3140',
+    '3993',
+    '4068',
+    '4457',
+    '4833',
+    '8522',
+    '9091',
+    '9371',
+    '10798',
+    '13721',
+    '17018',
+    '17169',
+    '17254',
+    '17921',
+    '18262',
+    '20476',
+    '22753',
+    '22759',
+    '23622',
+    '24269',
+    '27717',
+    '27884',
+    '29573',
+    '29865',
+    '29983',
+    '29992',
+    '30007',
+    '30026',
+    '30929',
+    '54918',
+    '60754',
+    '6227',
+    '64395',
+    '66899',
+    '67983',
+    '68492'
 ]
 
 CLASSES = [
@@ -268,7 +335,7 @@ def copy_component_image(component):
     src = os.path.join(BASE_PATH, 'screenshots', filename)
     dst = os.path.join('./data/custom/images', filename)
 
-    background = Image.new('RGB', (IMG_SIZE, IMG_SIZE))
+    background = Image.new('RGB', (IMG_SIZE, IMG_SIZE), 'white')
     picture = Image.open(src).convert('RGB')
     picture.thumbnail((IMG_SIZE, IMG_SIZE), Image.ANTIALIAS)
     background.paste(picture, ((IMG_SIZE - picture.size[0]) // 2, 0))
@@ -283,11 +350,11 @@ hi = load_hierarchies()
 #img = load_screenshots()
 components = [recursive_extract(h, h['id']) for h in hi]
 
-# files = glob.glob('./data/custom/images/*jpg')
-# for f in files:
-#     os.remove(f)
-# for c in tqdm(components):
-#     copy_component_image(c[0])
+files = glob.glob('./data/custom/images/*jpg')
+for f in files:
+    os.remove(f)
+for c in tqdm(components):
+    copy_component_image(c[0])
 
 txts = [component_group_to_txt(component_group) for component_group in components]
 large_components = sum([t[2] for t in txts])
