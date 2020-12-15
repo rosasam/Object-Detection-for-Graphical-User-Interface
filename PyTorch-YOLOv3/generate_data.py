@@ -349,14 +349,14 @@ training_set_path = './data/custom/'
 hi = load_hierarchies()
 #img = load_screenshots()
 components = [recursive_extract(h, h['id']) for h in hi]
-
+components = [component_group for component_group in components if component_group]
 files = glob.glob('./data/custom/images/*jpg')
 for f in files:
     os.remove(f)
 for c in tqdm(components):
     copy_component_image(c[0])
 
-txts = [component_group_to_txt(component_group) for component_group in components if component_group]
+txts = [component_group_to_txt(component_group) for component_group in components]
 large_components = sum([t[2] for t in txts])
 txts = [(t[0], t[1]) for t in txts]
 txt_paths = ['./data/custom/images/' + txt[0].split('.')[0] + '.jpg' for txt in txts]

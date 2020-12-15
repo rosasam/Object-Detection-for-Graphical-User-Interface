@@ -26,7 +26,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--epochs", type=int, default=100, help="number of epochs")
     parser.add_argument("--batch_size", type=int, default=8, help="size of each image batch")
-    parser.add_argument("--gradient_accumulations", type=int, default=2000, help="number of gradient accums before step")
+    parser.add_argument("--gradient_accumulations", type=int, default=2, help="number of gradient accums before step")
     parser.add_argument("--model_def", type=str, default="config/yolov3.cfg", help="path to model definition file")
     parser.add_argument("--data_config", type=str, default="config/coco.data", help="path to data config file")
     parser.add_argument("--pretrained_weights", type=str, help="if specified starts from checkpoint model")
@@ -105,6 +105,8 @@ if __name__ == "__main__":
             loss, outputs = model(imgs, targets)
             loss.backward()
 
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1)
+
             if batches_done % opt.gradient_accumulations:
                 # Accumulates gradient before each step
                 optimizer.step()
@@ -127,13 +129,13 @@ if __name__ == "__main__":
                 metric_table += [[metric, *row_metrics]]
 
                 # Tensorboard logging
-                tensorboard_log = []
-                for j, yolo in enumerate(model.yolo_layers):
-                    for name, metric in yolo.metrics.items():
-                        if name != "grid_size":
-                            tensorboard_log += [(f"{name}_{j+1}", metric)]
-                tensorboard_log += [("loss", loss.item())]
-                logger.list_of_scalars_summary(tensorboard_log, batches_done)
+               # tensorboard_log = []
+               # for j, yolo in enumerate(model.yolo_layers):
+               #     for name, metric in yolo.metrics.items():
+               #         if name != "grid_size":
+               #             tensorboard_log += [(f"{name}_{j+1}", metric)]
+               # tensorboard_log += [("loss", loss.item())]
+               # logger.list_of_scalars_summary(tensorboard_log, batches_done)
 
             log_str += AsciiTable(metric_table).table
             log_str += f"\nTotal loss {loss.item()}"
